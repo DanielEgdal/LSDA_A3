@@ -1,6 +1,6 @@
-name: Wind_pred
+name: wind_pred
 
-conda_env: wind_env.yaml
+conda_env: conda.yaml
 
 entry_points:
   main:
