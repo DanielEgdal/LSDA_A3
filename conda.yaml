@@ -1,3 +1,4 @@
+name: wind_pred
 channels:
 - defaults
 - conda-forge
@@ -8,4 +9,3 @@ dependencies:
   - mlflow
   - scikit-learn==0.23.2
   - cloudpickle==1.6.0
-name: wind_env
