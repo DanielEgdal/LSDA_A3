@@ -1,0 +1,7 @@
+name: Wind_pred
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    command: "python basic.py"
