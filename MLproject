@@ -4,4 +4,4 @@ conda_env: wind_env.yaml
 
 entry_points:
   main:
-    command: "python basic.py"
+    command: "python3 basic.py"
