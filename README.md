@@ -7,8 +7,12 @@ ____
 To run your own version:
 
 `mlflow run .`
+
+To serve this version:
+
+`mlflow models serve -m best_model -h 0.0.0.0`
 ____
-To simply serve a model: 
+To simply serve without running: 
 
 `cd serving`
 
@@ -22,6 +26,5 @@ Test script: `curl http://40.127.101.229:5000/invocations -H 'Content-Type: appl
 ____
 Notes:
 
-* it might not possible to serve a model you have run on your own. On my VM the conda.yaml files get generated incorrectly.
 * The file with_logging_basic.py is not in use because of issues in the an mlflow file. If you have the file on your local machine, go to `[...]lib/python3.8/site-packages/mlflow/utils/validation.py` and change all instances of `250` to `500` 
 
