@@ -138,12 +138,12 @@ def get_dev_scores(xdev,ydev,pipe): # MSE score
 
 def dtree_or_grad_boost(xdev,ydev,dtree,grad_boost): # Choose either decision tree or gradient booster
     # with mlflow.start_run(nested= True):
-    #     dscore = get_dev_scores(xdev,ydev,dtree)
+    dscore = get_dev_scores(xdev,ydev,dtree)
     #     mlflow.log_metric("MSE",dscore)
     #     mlflow.log_params(dtree.get_params())
     #     mlflow.sklearn.log_model(sk_model=dtree,artifact_path="Decision tree")
     # with mlflow.start_run(nested= True):
-    #     gbscore = get_dev_scores(xdev,ydev,grad_boost)
+    gbscore = get_dev_scores(xdev,ydev,grad_boost)
     #     mlflow.log_metric("MSE",gbscore)
     #     mlflow.log_params(grad_boost.get_params())
     #     mlflow.sklearn.log_model(sk_model=grad_boost,artifact_path="Gradient Booster")
@@ -172,9 +172,8 @@ def save_best(old,new,xdev,ydev): # If the new model is better, oversave the old
 def run_all(Old_mod_pres=True): # Run all together, with the option to not use a previous model
     all_x,all_y,newest_forecasts = load()
     x,xdev,y,ydev=train_dev_splitc(all_x,all_y)
-    #with mlflow.start_run():
+
     grad_pipe = run_pipe(x,y,extended_pipe_grad(),1)
-    #grad_pipe = run_pipe(x,y,extended_pipe_dtree(),2)
     dtree_pipe = run_pipe(x,y,extended_pipe_dtree(),2)
     
     new_pipe = dtree_or_grad_boost(xdev,ydev,dtree_pipe,grad_pipe)
@@ -194,9 +193,6 @@ def run_all(Old_mod_pres=True): # Run all together, with the option to not use a
     mlflow.sklearn.save_model(sk_model=new_pipe,path="best_model")
     
     return best.predict(newest_forecasts)
-
-# with mlflow.start_run():
-#     print(run_all(False))
 
 with mlflow.start_run():
     print(run_all(False))
