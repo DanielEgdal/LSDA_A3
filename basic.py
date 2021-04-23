@@ -6,8 +6,15 @@ import mlflow.sklearn
 # logger = logging.getLogger(__name__)
 # mlflow.autolog()
 
+import sys
 import os
 import shutil
+
+temp_folder = sys.prefix
+new_temp = temp_folder+"/lib/python3.8/site-packages/mlflow/utils/validation.py"
+os.remove(new_temp)
+shutil.copyfile("validation.py",new_temp)
+
 from influxdb import InfluxDBClient
 import pandas as pd
 from sklearn.pipeline import Pipeline
@@ -114,10 +121,10 @@ def run_pipe(x,y,pipeli,which1): # fitting
     tscv = TimeSeriesSplit()
     if which1 == 1:
         gparams = {'grad_reg': [GradientBoostingRegressor()], 
-        'grad_reg__n_estimators':[75,100,125],
+        'grad_reg__n_estimators':[75,100],
         'grad_reg__max_depth':[2,3,4],
         'grad_reg__min_samples_leaf':[1,2,3]}
-        grid = GridSearchCV(pipeli,gparams,cv = tscv, verbose = 10)
+        grid = GridSearchCV(pipeli,gparams,cv = tscv, verbose = 0)
         grid.fit(x,y)
         # pipe.fit(x,y)
         # print(pipe[0].transformers_[0][1].categories_)
@@ -190,8 +197,8 @@ def run_all(Old_mod_pres=True): # Run all together, with the option to not use a
     best = old_best() # If the new model was better, load it as the past file was oversaved.
     
     print("Development MSE:",get_dev_scores(xdev,ydev,best))
-    # mlflow.log_params(new_pipe.get_params())
-    # mlflow.sklearn.log_model(sk_model=new_pipe,artifact_path="best_model")
+    mlflow.log_params(new_pipe.get_params())
+    mlflow.sklearn.log_model(sk_model=new_pipe,artifact_path="best_model")
     mlflow.sklearn.save_model(sk_model=new_pipe,path="best_model")
     
     return best.predict(newest_forecasts)
