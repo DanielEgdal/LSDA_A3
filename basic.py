@@ -6,6 +6,8 @@ import mlflow.sklearn
 # logger = logging.getLogger(__name__)
 # mlflow.autolog()
 
+import os
+import shutil
 from influxdb import InfluxDBClient
 import pandas as pd
 from sklearn.pipeline import Pipeline
@@ -196,3 +198,6 @@ def run_all(Old_mod_pres=True): # Run all together, with the option to not use a
 
 with mlflow.start_run():
     print(run_all(False))
+
+os.remove("best_model/conda.yaml")
+shutil.copyfile("serving/best_model/conda.yaml","best_model/conda.yaml")
