@@ -20,4 +20,8 @@ At https://orkneycloud.itu.dk/mlflow/ for checking.
 Test script: `curl http://40.127.101.229:5000/invocations -H 'Content-Type: application/json' -d '{"columns": ["Speed","Direction"],"data":[[7.15264,"NNW"],[3.12928,"W"],[5.81152,"NNW"],[7.15264,"NNW"]]}'`
 
 ____
-Note, it might not possible to serve a model you have run on your own. On my VM the conda.yaml files get generated incorrectly.
+Notes:
+
+* it might not possible to serve a model you have run on your own. On my VM the conda.yaml files get generated incorrectly.
+* The file with_logging_basic.py is not in use because of issues in the an mlflow file. If you have the file on your local machine, go to `[...]lib/python3.8/site-packages/mlflow/utils/validation.py` and change all instances of `250` to `500` 
+
