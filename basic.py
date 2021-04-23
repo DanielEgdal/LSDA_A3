@@ -171,7 +171,6 @@ def old_best(): # Load best model from earlies
 def save_best(old,new,xdev,ydev): # If the new model is better, oversave the old
     new_score = get_dev_scores(xdev,ydev,new)
     old_score = get_dev_scores(xdev,ydev,old)
-    mlflow.log_metric("MSE",new_score)
     if new_score < old_score:
         joblib.dump(new,"best.pkl")
         print('Model oversaved')
@@ -197,6 +196,8 @@ def run_all(Old_mod_pres=True): # Run all together, with the option to not use a
     best = old_best() # If the new model was better, load it as the past file was oversaved.
     
     print("Development MSE:",get_dev_scores(xdev,ydev,best))
+    mse = get_dev_scores(xdev,ydev,newpipe)
+    mlflow.log_metric("MSE",mse)
     mlflow.log_params(new_pipe.get_params())
     mlflow.sklearn.log_model(sk_model=new_pipe,artifact_path="best_model")
     mlflow.sklearn.save_model(sk_model=new_pipe,path="best_model")
