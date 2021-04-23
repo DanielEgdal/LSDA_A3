@@ -61,16 +61,16 @@ def load():
     for_df = get_df(forecasts)
     
     # Join tables
-    train_df = gen_df.join(wind_df)[['Direction','Speed','Total']]
+    train_df = gen_df.join(wind_df)[['Speed','Direction','Total']]
     
     train_df=train_df.drop_duplicates()
     train_df_int = interpolate(train_df) # Fixing NaNs
     
     newest_source_time = for_df["Source_time"].max()
-    newest_forecasts = for_df.loc[for_df["Source_time"] == newest_source_time][['Direction','Speed']].copy()
+    newest_forecasts = for_df.loc[for_df["Source_time"] == newest_source_time][['Speed','Direction']].copy()
     
     # splitting to x and y
-    train_x = train_df_int[['Direction','Speed']]
+    train_x = train_df_int[['Speed','Direction']]
     train_Y = train_df_int[['Total']]
     return train_x,train_Y,newest_forecasts
 
@@ -86,8 +86,8 @@ def extended_pipe_grad(): # Gradient booster pipeline
     short_array = [np.array(['E', 'ENE', 'ESE', 'N', 'NE', 'NNE', 'NNW', 'NW', 'S', 'SE', 'SSE',
     'SSW', 'SW', 'W', 'WNW', 'WSW'], dtype=object)]
     ct = make_column_transformer(
-        (OneHotEncoder(categories = short_array),[0]),
-        (StandardScaler(), [1])
+        (StandardScaler(), [0]),
+        (OneHotEncoder(categories = short_array),[1])
         )
     pipe2 = Pipeline(
     [('encode',ct),
@@ -99,8 +99,8 @@ def extended_pipe_dtree(): # Decision tree pipeline
     short_array = [np.array(['E', 'ENE', 'ESE', 'N', 'NE', 'NNE', 'NNW', 'NW', 'S', 'SE', 'SSE',
     'SSW', 'SW', 'W', 'WNW', 'WSW'], dtype=object)]
     ct = make_column_transformer(
-        (OneHotEncoder(categories = short_array),[0]),
-        (StandardScaler(), [1])
+        (StandardScaler(), [0]),
+        (OneHotEncoder(categories = short_array),[1])
         )
     pipe2 = Pipeline(
     [('encode',ct),
@@ -194,7 +194,7 @@ def run_all(Old_mod_pres=True): # Run all together, with the option to not use a
     print("Development MSE:",get_dev_scores(xdev,ydev,best))
     mlflow.log_params(new_pipe.get_params())
     mlflow.sklearn.log_model(sk_model=new_pipe,artifact_path="best_model")
-    mlflow.sklearn.save_model(sk_model=new_pipe,path="best_model")
+    mlflow.sklearn.save_model(sk_model=new_pipe,path="best_model",conda_env="conda.yaml")
     
     return best.predict(newest_forecasts)
 
@@ -202,4 +202,4 @@ def run_all(Old_mod_pres=True): # Run all together, with the option to not use a
 #     print(run_all(False))
 
 with mlflow.start_run():
-    print(run_all())
+    print(run_all(False))
