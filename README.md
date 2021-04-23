@@ -26,5 +26,5 @@ Test script: `curl http://40.127.101.229:5000/invocations -H 'Content-Type: appl
 ____
 Notes:
 
-* The file with_logging_basic.py is not in use because of issues in the an mlflow file. If you have the file on your local machine, go to `[...]lib/python3.8/site-packages/mlflow/utils/validation.py` and change all instances of `250` to `500` 
+* Conda is not working quite correct. Therefore, the conda.yaml file is being oversaved with one that works. An Sklearn library (`/lib/python3.8/site-packages/mlflow/utils/validation.py`) is uploaded slightly differently to not cause errors.
 
