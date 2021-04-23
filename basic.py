@@ -196,7 +196,7 @@ def run_all(Old_mod_pres=True): # Run all together, with the option to not use a
     best = old_best() # If the new model was better, load it as the past file was oversaved.
     
     print("Development MSE:",get_dev_scores(xdev,ydev,best))
-    mse = get_dev_scores(xdev,ydev,newpipe)
+    mse = get_dev_scores(xdev,ydev,new_pipe)
     mlflow.log_metric("MSE",mse)
     mlflow.log_params(new_pipe.get_params())
     mlflow.sklearn.log_model(sk_model=new_pipe,artifact_path="best_model")
