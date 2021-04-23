@@ -18,7 +18,6 @@ import joblib
 import os
 from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
 from sklearn.ensemble import GradientBoostingRegressor
-from tqdm import tqdm
 import warnings
 warnings.filterwarnings('ignore')
 
